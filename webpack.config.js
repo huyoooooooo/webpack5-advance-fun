@@ -13,7 +13,7 @@ module.exports = {
       directory: path.resolve(__dirname, 'public'),
       publicPath: '/assets'
     },
-    // static: ['dist'],
+    // static: ['public'],
     compress: true,
     port: 8080,
     open: true,
