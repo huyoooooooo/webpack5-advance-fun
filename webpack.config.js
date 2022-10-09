@@ -9,19 +9,47 @@ module.exports = {
     filename: 'main.js'
   },
   devServer: {
+    // static: ['public']
     static: {
       directory: path.resolve(__dirname, 'public'),
       publicPath: '/assets'
     },
-    // static: ['public'],
-    compress: true,
-    port: 8080,
+    compress: true,   // gzip 压缩
+    port: 8081,
     open: true,
   },
   module: {
     rules: [
       {
-        test: /\.txt$/, use: 'raw-loader'
+        test: /\.txt$/,
+        // use: 'raw-loader'
+        type: 'asset/source'
+      },
+      {
+        test: /\.css$/, use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.scss$/, use: ['style-loader', 'css-loader', 'sass-loader']
+      },
+      {
+        test: /\.(jpg|png|gif|bmp)$/,
+        // 解决方案一
+        type: 'asset/resource'
+
+        // 解决方案二
+        // type: 'javascript/auto',
+
+        // 解决方案三
+        // dependency: { not: ['url'] },
+        // use: [
+        //   {
+        //     loader: 'file-loader',
+        //     options: {
+        //       name: '[hash:10].[ext]',
+        //       esModule: false
+        //     }
+        //   }
+        // ]
       }
     ]
   },

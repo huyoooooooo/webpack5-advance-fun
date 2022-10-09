@@ -1,0 +1,11 @@
+@import './bg.css';
+
+body {
+  color: skyblue
+}
+
+#image-container {
+  width: 580px;
+  height: 326px;
+  background-image: url('./images/street.jpg')
+}
