@@ -34,7 +34,10 @@ module.exports = {
       {
         test: /\.(jpg|png|gif|bmp)$/,
         // 解决方案一
-        type: 'asset/resource'
+        type: 'asset/resource',
+        generator: {
+          filename: '[hash][ext][query]'
+        }
 
         // 解决方案二
         // type: 'javascript/auto',
