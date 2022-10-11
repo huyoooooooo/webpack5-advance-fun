@@ -121,6 +121,8 @@ module.exports = {
 
 ## 2.1 开发服务器
 
++ 服务器配置: 静态文件地址, 是否压缩, 端口, 自动打开等属性.
+
 ```bash
 npm install webpack-dev-server --save-dev
 ```
@@ -128,14 +130,118 @@ npm install webpack-dev-server --save-dev
 ```javascript
 module.exports = {
   devServer: {
-    // static: ['assets'],
+    // static: ['public'],
     static: {
-      directory: path.join(__dirname, 'assets'),
-      publicPath: '/public',
+      directory: path.join(__dirname, 'public'),
+      publicPath: '/assets',
     }
     compress: true,
     port: 8080,
     open: true,
   },
+}
+```
+
+```json
+"scripts": {
+  "start": "webpack serve",     // 指令相较 webpack4 产生了变化
+}
+```
+
+## 2.2 支持 css & sass
+
++ 使用 loader 对样式进行处理, 需要注意的是, 处理顺序是从右往左处理
+
+```bash
+npm install style-loader css-loader node-sass sass-loader -D
+```
+
+```javascript
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/, use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.scss$/, use: ['style-loader', 'css-loader', 'sass-loader']
+      }
+    ]
+  }
+}
+```
+
+## 2.3 支持图片
+
+```javascript
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.(jpg|png|gif|bmp)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[hash:10].[ext]',
+              esModule: false
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### 2.3.1 静态资源
+
+将图片放置在静态文件根目录下，通过 img 的 src 对图片地址进行引用, 地址书写与配置有关。
+
+```html
+<img src="/assets/scene.jpg" alt="风景">
+```
+
+### 2.3.2 JS 引入图片
+
+通过 require 或者 import 的方式对图片进行引入, 图片通过 file-loader 或 url-loader(限制小图片转 base64) 处理。
+
+```javascript
+let Street = require('./images/street.jpg')   // 返回图片路径
+let Img = new Image()
+Img.src = Street
+
+document.body.appendChild(Img)
+```
+
+### 2.3.3 CSS 引入图片
+
+在 css 中通过 url 引入图片, 通过 css-loader 处理
+
+```css
+#image-container {
+  width: 580px;
+  height: 326px;
+  background-image: url('./images/street.jpg')
+}
+```
+
+### 2.3.4 重大变化
+
+[重大变更](https://webpack.js.org/guides/asset-modules/)： 上述都是使用了其他的 loader 来帮助 webpack 对图片资源进行处理。而在 webpack5 中通过资源模块允许使用资源文件且无需配置额外 loader。
+
+```javascript
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.txt$/, type: 'asset/source'
+      },
+      {
+        test: /\.(jpg|png|gif|bmp)$/,
+        type: 'asset/resource'
+      }
+    ]
+  }
 }
 ```
