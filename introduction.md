@@ -3,18 +3,17 @@ webpack 是一个 JS 应用程序的静态模块打包工具. 当处理应用程
 
 ## 1.1 安装
 
+`webpack` 是 webpack 的核心包, `webpack-cli` 是 webpack 的命令行工具包
+
 ```bash
 npm install webpack webpack-cli --save-dev
 ```
-
-`webpack` 是 webpack 的核心包, `webpack-cli` 是 webpack 的命令行工具包
 
 ## 1.2 入口(entry)
 
 + 入口起点指示 webpack 应该使用哪个模块作为内部依赖图的开始.进入入口起点后, webpack 会找出那些模块和库是入口起点(直接和间接)依赖的.
 + 默认值是 `src/index.js`, 也可以通过配置项的 entry 属性,指定一个或(多个)不同的入口起点.
 
-### 1.2.1 webpack.config.js
 ```javascript
 const path = require('path')
 module.exports = {
@@ -142,15 +141,17 @@ module.exports = {
 }
 ```
 
+配置指定脚本 `webpack serve` 指令，相较于 webpack4 指令发生大的改变
+
 ```json
 "scripts": {
-  "start": "webpack serve",     // 指令相较 webpack4 产生了变化
+  "start": "webpack serve"
 }
 ```
 
 ## 2.2 支持 css & sass
 
-+ 使用 loader 对样式进行处理, 需要注意的是, 处理顺序是从右往左处理
++ 使用 loader 对样式进行处理, 需注意：loader 处理顺序是从右往左执行
 
 ```bash
 npm install style-loader css-loader node-sass sass-loader -D
@@ -160,18 +161,16 @@ npm install style-loader css-loader node-sass sass-loader -D
 module.exports = {
   module: {
     rules: [
-      {
-        test: /\.css$/, use: ['style-loader', 'css-loader']
-      },
-      {
-        test: /\.scss$/, use: ['style-loader', 'css-loader', 'sass-loader']
-      }
+      { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+      { test: /\.scss$/, use: ['style-loader', 'css-loader', 'sass-loader'] }
     ]
   }
 }
 ```
 
 ## 2.3 支持图片
+
+图片有多种不同的格式，在检测文件类型时可以同时匹配多种。如果对文件处理还有特殊要求，可以通过配置 use 的 options 属性，比如文件名称, 是否是 es6 模块等。
 
 ```javascript
 module.exports = {
@@ -234,12 +233,13 @@ document.body.appendChild(Img)
 module.exports = {
   module: {
     rules: [
-      {
-        test: /\.txt$/, type: 'asset/source'
-      },
-      {
-        test: /\.(jpg|png|gif|bmp)$/,
-        type: 'asset/resource'
+      { test: /\.txt$/, type: 'asset/source' },
+      { 
+        test: /\.(jpg|png|gif|bmp)$/, 
+        type: 'asset/resource',
+        generator: {
+          filename: '[hash][ext][query]'
+        }
       }
     ]
   }
