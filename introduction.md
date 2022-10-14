@@ -1,9 +1,9 @@
 # 1. 介绍
-webpack 是一个 JS 应用程序的静态模块打包工具. 当处理应用程序时, 会在内部构件一个依赖图(dependency graph),此依赖图映射到项目所需每个模块, 并生成一个或多个bundle
+webpack 作为 JS 应用程序的静态模块打包工具。在处理应用程序时, 会先在内部构件一个依赖图(dependency graph)，此依赖图映射到项目所需每个模块，并生成一个或多个bundle。
 
 ## 1.1 安装
 
-`webpack` 是 webpack 的核心包, `webpack-cli` 是 webpack 的命令行工具包
+`webpack` 是 webpack 的核心包， `webpack-cli` 是 webpack 的命令行工具包。这也是 webpack 核心的两个包。
 
 ```bash
 npm install webpack webpack-cli --save-dev
@@ -11,17 +11,18 @@ npm install webpack webpack-cli --save-dev
 
 ## 1.2 入口(entry)
 
-+ 入口起点指示 webpack 应该使用哪个模块作为内部依赖图的开始.进入入口起点后, webpack 会找出那些模块和库是入口起点(直接和间接)依赖的.
-+ 默认值是 `src/index.js`, 也可以通过配置项的 entry 属性,指定一个或(多个)不同的入口起点.
++ 入口起点指示 webpack 应该使用哪个模块作为内部依赖图的开始。进入入口起点后， webpack 会找出那些模块和库是入口起点(直接和间接)依赖的。
++ 默认值是 `src/index.js` 文件，也可以通过配置项的 entry 属性，指定一个或(多个)不同的入口起点。
 
 ```javascript
 const path = require('path')
 module.exports = {
-  entry: './src/index.js'
+  entry: './src/index.js'       // 指定输入文件
 }
 ```
 
-默认指定配置文件为 webpack.config.js 文件, 指令中可以省略.
+默认打包时的配置文件为 webpack.config.js 文件， 在该指令中可以省略。
+
 ```json
 "scripts": {
   "build": "webpack --config webpack.config.js"
@@ -30,15 +31,15 @@ module.exports = {
 
 ## 1.3 输出(output)
 
-+ output 属性指定 webpack 输出所创建的 bundle 存储的文件位置, 以及如何命名这些文件
-+ 主要输出文件的默认值为 `./dist/main.js`, 其他文件默认在 dist 目录中
++ output 属性指定 webpack 输出时，创建的 bundle 文件的文件名以及所存储的文件夹
++ 主要输出文件的默认值为 `./dist/main.js`， 其他文件默认在 dist 目录中
 
 ```javascript
 module.exports = {
   entry: './src/index.js'
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'main.js'
+    path: path.resolve(__dirname, 'dist'),    // 指定输出文件夹
+    filename: 'main.js'                       // 指定输出文件名
   }
 }
 ```
@@ -46,7 +47,7 @@ module.exports = {
 ## 1.4 loader
 
 + webpack 只能理解 javascript 和 json 文件
-+ loader 让 webpack 有能力去处理其他类型文件, 并且转化为有效模块供应用程序使用并被添加到依赖图中
++ loader 让 webpack 有能力去处理其他类型文件， 并且转化为有效模块供应用程序使用并被添加到依赖图中
 
 ```javascript
 module.exports = {
@@ -57,7 +58,7 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.txt$/, use: 'raw-loader' }
+      { test: /\.txt$/, use: 'raw-loader' }       // 通过 raw-loader 处理 txt 结尾文件
     ]
   }
 }
@@ -65,7 +66,7 @@ module.exports = {
 
 ## 1.5  插件(plugin)
 
-+ 插件可以用来执行范围更广的任务,包括:打包优化、资源管理、注入环境变量.
++ 插件可以用来执行范围更广的任务,包括：打包优化、资源管理、注入环境变量.
 
 ```javascript
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -102,7 +103,7 @@ module.exports = {
   - 需要压缩 HTML/CSS/JS 代码
   - 需要压缩图片
 
-可以在命令行中指定,也可以在配置文件中配置
+可以在命令行中指定，也可以在配置文件中配置
 
 ```json
 "scripts": {
@@ -120,7 +121,7 @@ module.exports = {
 
 ## 2.1 开发服务器
 
-+ 服务器配置: 静态文件地址, 是否压缩, 端口, 自动打开等属性.
++ 服务器配置：[静态文件](https://webpack.js.org/configuration/dev-server/#devserverstatic)地址, 是否压缩，端口，自动打开等属性
 
 ```bash
 npm install webpack-dev-server --save-dev
@@ -141,7 +142,12 @@ module.exports = {
 }
 ```
 
-配置指定脚本 `webpack serve` 指令，相较于 webpack4 指令发生大的改变
+`static` 属性：
+  + 配置数组，同时配置多个静态文件地址
+  + 配置对象，可以修改静态文件的访问路径
+  + 组合使用
+
+配置指定脚本 `webpack serve` 指令执行 `npm start` 启动服务。该指令相较于 webpack4 版本发生较大改变
 
 ```json
 "scripts": {
@@ -151,7 +157,7 @@ module.exports = {
 
 ## 2.2 支持 css & sass
 
-+ 使用 loader 对样式进行处理, 需注意：loader 处理顺序是从右往左执行
++ 使用 loader 对样式进行处理，需注意：loader 的处理顺序是从右往左执行
 
 ```bash
 npm install style-loader css-loader node-sass sass-loader -D
@@ -161,8 +167,8 @@ npm install style-loader css-loader node-sass sass-loader -D
 module.exports = {
   module: {
     rules: [
-      { test: /\.css$/, use: ['style-loader', 'css-loader'] },
-      { test: /\.scss$/, use: ['style-loader', 'css-loader', 'sass-loader'] }
+      { test: /\.css$/, use: ['style-loader', 'css-loader'] },                  // 处理 css 文件
+      { test: /\.scss$/, use: ['style-loader', 'css-loader', 'sass-loader'] }   // 处理 scss 文件
     ]
   }
 }
@@ -180,8 +186,8 @@ module.exports = {
         test: /\.(jpg|png|gif|bmp)$/,
         use: [
           {
-            loader: 'file-loader',
-            options: {
+            loader: 'file-loader',            // 使用 file-loader 处理图片
+            options: {                        // options 添加额外配置
               name: '[hash:10].[ext]',
               esModule: false
             }
@@ -195,7 +201,7 @@ module.exports = {
 
 ### 2.3.1 静态资源
 
-将图片放置在静态文件根目录下，通过 img 的 src 对图片地址进行引用, 地址书写与配置有关。
+将图片放置在静态文件根目录下，通过 img 标签的 src 属性对图片进行地址引用。
 
 ```html
 <img src="/assets/scene.jpg" alt="风景">
@@ -203,7 +209,7 @@ module.exports = {
 
 ### 2.3.2 JS 引入图片
 
-通过 require 或者 import 的方式对图片进行引入, 图片通过 file-loader 或 url-loader(限制小图片转 base64) 处理。
+通过 require 或者 import 引入图片，图片通过 file-loader 或 url-loader(配置 limit 转 base64) 处理，转为绝对路径。
 
 ```javascript
 let Street = require('./images/street.jpg')   // 返回图片路径
@@ -227,7 +233,7 @@ document.body.appendChild(Img)
 
 ### 2.3.4 重大变化
 
-[重大变更](https://webpack.js.org/guides/asset-modules/)： 上述都是使用了其他的 loader 来帮助 webpack 对图片资源进行处理。而在 webpack5 中通过资源模块允许使用资源文件且无需配置额外 loader。
+在 webpack5 中内置了资源模块(asset modules)，在处理资源文件时，可以通过配置资源模块而无需配置额外 loader。同样也支持自定义文件名，以及图片转 base64 的配置项。具体可以参看[官网说明](https://webpack.js.org/guides/asset-modules/)
 
 ```javascript
 module.exports = {
