@@ -14,3 +14,5 @@ let Img = new Image()
 Img.src = Street
 
 document.body.appendChild(Img)
+
+let sum = (a, b) => a + b
